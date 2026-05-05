@@ -22,6 +22,9 @@ active_blacks = []
 white_sounds = []
 black_sounds = []
 
+left_oct = 4
+right_oct = 5
+
 
 for i in range(len(pl.white_notes)):
     white_sounds.append(mixer.Sound(f'assets\\notes\\{pl.white_notes[i]}.wav'))
@@ -73,6 +76,31 @@ def draw_piano(whites, blacks):
 
 running = True
 while running:
+    left_dict = {'Z': f'C{left_oct}',
+                 'S': f'C#{left_oct}',
+                 'X': f'D{left_oct}',
+                 'D': f'D#{left_oct}',
+                 'C': f'E{left_oct}',
+                 'V': f'F{left_oct}',
+                 'G': f'F#{left_oct}',
+                 'B': f'G{left_oct}',
+                 'H': f'G#{left_oct}',
+                 'N': f'A{left_oct}',
+                 'J': f'A#{left_oct}',
+                 'M': f'B{left_oct}'}
+
+    right_dict = {'R': f'C{right_oct}',
+                  '5': f'C#{right_oct}',
+                  'T': f'D{right_oct}',
+                  '6': f'D#{right_oct}',
+                  'Y': f'E{right_oct}',
+                  'U': f'F{right_oct}',
+                  '8': f'F#{right_oct}',
+                  'I': f'G{right_oct}',
+                  '9': f'G#{right_oct}',
+                  'O': f'A{right_oct}',
+                  '0': f'A#{right_oct}',
+                  'P': f'B{right_oct}'}
     timer.tick(fps)
     screen.fill("grey")
     white_keys, black_keys, active_whites, active_blacks = draw_piano(active_whites, active_blacks)
@@ -93,6 +121,25 @@ while running:
                 if white_keys[i].collidepoint(event.pos) and not black_key:
                     white_sounds[i].play(0,1000)
                     active_whites.append([i,30])
+        if event.type == pygame.TEXTINPUT:
+            if event.text.upper() in left_dict:
+                if left_dict[event.text.upper()][1] == '#':
+                    index = pl.black_labels.index(left_dict[event.text.upper()])
+                    black_sounds[index].play(0, 1000)
+                    active_blacks.append([index, 30])
+                else:
+                    index = pl.white_notes.index(left_dict[event.text.upper()])
+                    white_sounds[index].play(0, 1000)
+                    active_whites.append([index, 30])
+            if event.text.upper() in right_dict:
+                if right_dict[event.text.upper()][1] == '#':
+                    index = pl.black_labels.index(right_dict[event.text.upper()])
+                    black_sounds[index].play(0, 1000)
+                    active_blacks.append([index, 30])
+                else:
+                    index = pl.white_notes.index(right_dict[event.text.upper()])
+                    white_sounds[index].play(0, 1000)
+                    active_whites.append([index, 30])
 
     pygame.display.flip()
 
